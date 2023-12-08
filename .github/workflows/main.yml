@@ -17,10 +17,10 @@ jobs:
       run: |
         wget https://github.com/geode-sdk/cli/releases/download/v2.6.1/geode-cli-v2.6.1-linux.zip
         unzip geode-cli-v2.6.1-linux.zip
-        sudo mv geode-cli /usr/local/bin/geode
+        chmod +x geode && mv geode /usr/bin
 
     - name: Create Geode Mod
-      run: geode new MyAwesomeMod
+      run: geode new
 
     - name: Commit and Push
       run: |
