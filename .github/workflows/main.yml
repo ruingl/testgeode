@@ -18,9 +18,11 @@ jobs:
         wget https://github.com/geode-sdk/cli/releases/download/v2.6.1/geode-cli-v2.6.1-linux.zip
         unzip geode-cli-v2.6.1-linux.zip
         chmod +x geode
+        sudo mv geode /usr/local/bin/geode
+        geode config setup
 
     - name: Create Geode Mod
-      run: ./geode new
+      run: geode new
 
     - name: Commit and Push
       run: |
