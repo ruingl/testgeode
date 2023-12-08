@@ -1,45 +1,31 @@
-name: Build Geode Mod
+name: Create and Push Geode Mod
 
 on:
-  workflow_dispatch:
   push:
     branches:
-      - "main"
+      - main
 
 jobs:
   build:
-    strategy:
-      fail-fast: false
-      matrix:
-        config:
-        - name: Windows
-          os: windows-latest
-          
-        - name: macOS
-          os: macos-latest
-
-    name: ${{ matrix.config.name }}
-    runs-on: ${{ matrix.config.os }}
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Build the mod
-        uses: geode-sdk/build-geode-mod@main
-        with:
-          combine: true
-      
-  package:
-    name: Package builds
     runs-on: ubuntu-latest
-    needs: ['build']
 
     steps:
-      - uses: geode-sdk/build-geode-mod@combine
-        id: build
+    - name: Checkout Repository
+      uses: actions/checkout@v2
 
-      - uses: actions/upload-artifact@v3
-        with:
-          name: Build Output
-          path: ${{ steps.build.outputs.build-output }}
-          
+    - name: Set up Geode CLI
+      run: |
+        wget https://github.com/geode-sdk/cli/releases/download/v2.6.1/geode-cli-v2.6.1-linux.zip
+        unzip geode-cli-v2.6.1-linux.zip
+        sudo mv geode-cli /usr/local/bin/geode
+
+    - name: Create Geode Mod
+      run: geode new MyAwesomeMod
+
+    - name: Commit and Push
+      run: |
+        git config --global user.email "your-email@example.com"
+        git config --global user.name "Your Name"
+        git add .
+        git commit -m "Create new Geode mod"
+        git push
